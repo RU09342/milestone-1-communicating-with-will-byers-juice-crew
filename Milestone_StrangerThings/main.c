@@ -18,9 +18,9 @@ int main(void)
 	TB0EX0 = TBIDEX_3;      // DIVIDE BY 4
 	TB0CCTL0 = CCIE;
 	TB0CCR0 = 256;      //set PWM frequency to 1 KHz
-	TB0CCR1 = 125;        //initialize red Duty cycle to CCR1
+	TB0CCR1 = 0;        //initialize red Duty cycle to CCR1
 	TB0CCTL1 = CCIE;
-	TB0CCR2 = 125;        //initialize green PWM to CCR2
+	TB0CCR2 = 0;        //initialize green PWM to CCR2
 	TB0CCTL2 = CCIE;
 
 //initialize timer B1
@@ -28,7 +28,7 @@ int main(void)
     TB1EX0 = TBIDEX_3;      // DIVIDE BY 4
 	TB1CCTL0 = CCIE;
 	TB1CCR0 = 256;      //set PWM frequency to 2 Khz
-	TB1CCR1 = 50;        //initialize blue PWM to B1CCR1
+	TB1CCR1 = 0;        //initialize blue PWM to B1CCR1
 	TB1CCTL1 = CCIE;
 
 	/* UART INIT */
@@ -76,12 +76,14 @@ __interrupt void Timer0_B1_ISR (void){
 
     switch (TB0IV){
     case 0x02:      //CCR1
-        P1OUT |= BIT0;
+        if(TB0CCR1 != 256)
+            P1OUT |= BIT0;
 
         TB0CCTL1 &= ~BIT0;    //clears flags
         break;
     case 0x04:      //CCR2
-        P1OUT |= BIT1;
+        if(TB0CCR2 != 256)
+            P1OUT |= BIT1;
 
         TB0CCTL2 &= ~BIT0;    //clears flags
         break;
@@ -98,27 +100,42 @@ __interrupt void Timer1_B0_ISR (void){
 /*ISR FOR TIMERB1 CCR1*/
 #pragma vector=TIMER1_B1_VECTOR
 __interrupt void Timer1_B1_ISR (void){
-    P1OUT |= BIT2;
+    if(TB1CCR1 != 256)
+        P1OUT |= BIT2;
 
     TB1CCTL1 &= ~BIT0;    //clears flags
 }
 /* ISR FOR UART RX */
-#if defined(__TI_COMPILER_VERSION__) || defined(__IAR_SYSTEMS_ICC__)
 #pragma vector=USCI_A0_VECTOR
-__interrupt void USCI_A0_ISR(void)
-#elif defined(__GNUC__)
-void __attribute__ ((interrupt(USCI_A0_VECTOR))) USCI_A0_ISR (void)
-#else
-#error Compiler not supported!
-#endif
-{
+__interrupt void USCI_A0_ISR(void){
+
   switch(__even_in_range(UCA0IV,USCI_UART_UCTXCPTIFG))
   {
     case USCI_NONE: break;
     case USCI_UART_UCRXIFG:
-      while(!(UCA0IFG&UCTXIFG));
-      UCA0TXBUF = UCA0RXBUF;
-      __no_operation();
+       switch(position){            //SWITCHES ON BYTE RECIEVED
+       case 0:                      // byte 0 received
+           while(!(UCA0IFG&UCTXIFG));    //waits for current transmission to finish
+           UCA0TXBUF = UCA0RXBUF - 3;        // transmits the package total length -3
+           __no_operation();
+           break;
+       case 1:
+           TB0CCR1 = UCA0RXBUF;     // SET RED DUTY CYCLE
+           break;
+       case 2:
+           TB0CCR2 = UCA0RXBUF;     // SET GREEN DUTY CYCLE
+           break;
+       case 3:
+           TB1CCR1 = UCA0RXBUF;     // SET BLUE DUTY CYCLE
+           break;
+       default:                     // TRANSMITS THE REST OF THE DATA AS IT IS RECIEVED
+          while(!(UCA0IFG&UCTXIFG));    //waits for current transmission to finish
+          UCA0TXBUF = UCA0RXBUF;
+          __no_operation();
+           break;
+       }
+
+      position += 1;        //ADDS ONE TO POSITION
       break;
     case USCI_UART_UCTXIFG: break;
     case USCI_UART_UCSTTIFG: break;
