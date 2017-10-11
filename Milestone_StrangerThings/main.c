@@ -110,6 +110,27 @@ int main(void)
 	  UCA0CTLW0 &= ~UCSWRST;                    // Initialize eUSCI
 	  UCA0IE |= UCRXIE;                         // Enable USCI_A0 RX interrupt
 
+	  /*LED START UP PATTERN - BLINKS THROUGH A FEW COLORS*/
+      P1OUT |= BIT0;
+      P1OUT |= BIT1;
+      P1OUT |= BIT2;
+
+	  P1OUT &= ~BIT0;
+	  _delay_cycles(5000000);
+      P1OUT &= ~BIT1;
+      _delay_cycles(5000000);
+      P1OUT |= BIT0;
+      _delay_cycles(5000000);
+      P1OUT &= ~BIT2;
+      _delay_cycles(5000000);
+      P1OUT |= BIT1;
+      _delay_cycles(5000000);
+      P1OUT &= ~BIT0;
+      _delay_cycles(5000000);
+      P1OUT |= BIT2;
+      _delay_cycles(5000000);
+      P1OUT |= BIT0;
+
 	  __bis_SR_register(LPM3_bits|GIE);         // Enter LPM3, interrupts enabled
 }
 /*ISR FOR TIMERB0 CCR0*/
@@ -189,7 +210,10 @@ __interrupt void USCI_A0_ISR(void){
            break;
        }
 
-      position += 1;        //ADDS ONE TO POSITION
+       if(UCA0RXBUF != 0x0D)    //if not end of transmission byte
+           position += 1;        //ADDS ONE TO POSITION
+       else
+           position = 0;        //else get ready for next transmission
       break;
     case USCI_UART_UCTXIFG: break;
     case USCI_UART_UCSTTIFG: break;
