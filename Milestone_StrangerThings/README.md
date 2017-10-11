@@ -4,10 +4,13 @@ As a leader in developing programs for Embedded Systems, Juice Crew LLC. has and
 ## Project Overview
 The goal of this project was to create addressable RGB LEDs. This project stems from Will Byers' mother's Christmas Light Wall in the Netflix's "Stranger Things." The addressable LEDs are made of many nodes in series. Each Node in the string is a team's microprocessor running their own individual program. Because of this, if anyone's code does not work, the LEDs will not work properly. Another limitation is that the groups do not know where they will place in the series, therefore, the code must be independent of position.
 ## Program Overview
-The program developed for this project first starts by initializing the GPIO Pins and control registers. This allows for the program to run and function as properly intended. More detail can be found within the code's main function. From here, the LED is tested. The pro the processor goes into low power mode, then waits for a UART message. What happens during the 
+### Initialization
+The program developed for this project first starts by initializing the GPIO Pins and control registers. The LED outputs were configure to be red at P1 bit 0, green at P1 bit 1, blue at P1 bit 2.
+### Testing the LED
+Once initialization is completed, the program runs a small test program to verify the red, green and blue parts of the LED are working correctly. The funciton first sets the red LED (P1OUT bit 0) to 1 for 50000 clock cycles then turns sets it back to 0. The funciton then sets the green LED (P1OUT bit 1) to 1 for 50000 clock cycles then turns sets it back to 0. The funciton first sets the blue LED (P1OUT bit 2) to 1 for 50000 clock cycles then turns sets it back to 0. All the code for this can be found in xxxx.
 ### Recieving from UART
 This program recieves the 3 RGB LED's output values from UART. The UART package can be anywhere between 5 and 80 bytes long, depending on the position of the node. ???
-### UART to PWM
+### UART to Output
 The UART code is read from the array and the Duty Cycle values are saved in the capture compare registers. Because of this and the fact that the timer interupts are enabled, the LED can be controlled by timer interupts. For example, the UART input for the red duty cycle will be saved directly to Timer B0  capture compare register 1 (TB0CCR1). The timer interupt on TB0CCR1 will then change the red duty cycle output directly. This code can be found on line ? in the milestone 1 program.
 ### Why the FR2311?
 While FR2311 lacks the functionality compared to other MSP430 family controllers, it is currently available for $1.53 as compared to $2.66 for the next alternative: the MSP430G2553. 
