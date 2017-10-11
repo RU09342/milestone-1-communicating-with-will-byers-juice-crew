@@ -1,11 +1,10 @@
 # Milestone 1: Communicating with Will Byers
-For this Milestone, the MSP430FR2311 was used to receive a UART string, set an RGB LED based on 3 bytes of the string, then transmit the string without the RGB bytes used on this node. 
 ## Introduction
 As a leader in developing programs for Embedded Systems, Juice Crew LLC. has and will continue to develop solutions to many customer needs. In this specific product, our customer has requested that this solution be as cost effective as possible, without sacrificing performance. The specific need is to blink a RGB led from an array of 80 or less characters.
 ## Project Overview
-The goal of this project was to recreate an addressable string RGB LEDs. This project stems from Will Byers' mother's Christmas Light Wall in the Netflix's "Stranger Things." The addressable string is made of many nodes in series. Each Node in the string is an indidual group with their own individual program. Because of this, the code must work no matter where and what comes before and after it.
+The goal of this project was to create addressable RGB LEDs. This project stems from Will Byers' mother's Christmas Light Wall in the Netflix's "Stranger Things." The addressable LEDs are made of many nodes in series. Each Node in the string is a team's microprocessor running their own individual program. Because of this, if anyone's code does not work, the LEDs will not work properly. Another limitation is that the groups do not know where they will place in the series, therefore, the code must be independent of position.
 ## Program Overview
-This program first starts by initializing the GPIO Pins and control registers. This allows for the program to run and function as properly intended. More detail can be found within the code's main function. From here, the LED is tested. The pro the processor goes into low power mode, then waits for a UART message. What happens during the 
+The program developed for this project first starts by initializing the GPIO Pins and control registers. This allows for the program to run and function as properly intended. More detail can be found within the code's main function. From here, the LED is tested. The pro the processor goes into low power mode, then waits for a UART message. What happens during the 
 ### Recieving from UART
 This program recieves the 3 RGB LED's output values from UART. The UART package can be anywhere between 5 and 80 bytes long, depending on the position of the node. ???
 ### UART to PWM
