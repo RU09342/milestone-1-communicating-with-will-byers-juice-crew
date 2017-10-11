@@ -1,6 +1,6 @@
 # Milestone 1: Communicating with Will Byers
 ## Introduction
-As a leader in developing programs for Embedded Systems, Juice Crew LLC. has and will continue to develop solutions to many customer needs. In this specific product, our customer has requested that this solution be as cost effective as possible, without sacrificing performance. The specific need is to blink a RGB led from an array of 80 or less characters.
+As a leader in developing programs for Embedded Systems, Juice Crew LLC. has and will continue to develop solutions to many customer needs. In this specific product, our customer has requested that this solution be as cost effective as possible, without sacrificing performance. The specific need is to control a RGB led from an array of 80 or less characters.
 ## Project Overview
 The goal of this project was to create addressable RGB LEDs through a package. This project stems from Will Byers' mother's Christmas Light Wall in the Netflix's "Stranger Things." The addressable LEDs are made of many nodes in series. Each Node in the string is a team's microprocessor running their own individual program. Because of this, if anyone's code does not work, the LEDs will not work properly. Another limitation is that the groups do not know where they will place in the series, therefore, the code must be independent of position.
 ### The Package
