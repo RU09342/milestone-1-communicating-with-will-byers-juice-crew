@@ -13,7 +13,7 @@ Once initialization is completed, the program runs a small test program to verif
 ### UART to Output
 The UART code is read from the package and the Duty Cycle values are saved in the capture compare registers. Because of this and the fact that the timer interrupts are enabled, the LED can be controlled by timer interrupts. For example, the UART input for the red duty cycle will be saved directly to Timer B0  capture compare register 1 (TB0CCR1). The timer interrupt on TB0CCR1 will then change the red duty cycle output directly. This code can be found on line ? in the milestone 1 program.
 ### Why the FR2311?
-While FR2311 lacks the functionality compared to other MSP430 family controllers, it is currently available for $1.53 as compared to $2.66 for the next alternative: the MSP430G2553. 
+While FR2311's pwm outputs are on the same pins as the UART recieve and transmit pins Because of this only software pwm can be used to have pwm outputs on other pins. this was favorable compared to other MSP430 family controllers, because it is currently available for $1.53 as compared to $2.66 for the next alternative: the MSP430G2553. The other processors cost upwards of $7 so they were not considered at all.
 
 #### Working Around Limited Features
 One feature the FR2311 lack is 4 Capture Compare Registers on the same timer. One would control the PWM frequency and the other three would control each color of the RGB LED.  Because of this, the time needed to develop a working program will increase and thus increase engineering costs. 
