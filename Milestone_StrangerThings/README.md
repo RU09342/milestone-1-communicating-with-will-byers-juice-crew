@@ -8,6 +8,10 @@ The package is made up of 80 bytes. The 80 byte package is sent to the first nod
 ## Program Overview
 ### Initialization
 The program developed for this project first starts by initializing the GPIO Pins and control registers. The LED outputs were configured to be red at P1.0, green at P1.1, blue at P1.2. Because the RGB LED is in a common anode configuration the corresponding color of the LED is only on when the port output is low. Timer B0 was set to up mode, SMCLK, and internal divider set to 8, and then the expanded divider set to 4. The Timer B0 Capture Compare register 0 (TB0CCR0) and TB1CCR0 were set to 255 (sets maximum timer value) to set a PWM (pulse width modulation) frequency about 1 kHz. TB0CCTL0, TB0CCTL1, TB0CCTL2, TB1CCTL0, and TB1CCTL1 were set to enable interrupts. This allows for TB0CCR1, TB0CCR2, and TB1CCR1's values of 127, to set the duty cycle to 50%. This works by setting the P1.0, P1.1, and P1.2 (turning off red, green, and blue LEDs) when the timer is 127, and reseting P1.0, P1.1, and P1.2 (turning on red, green, and blue LEDs) when the timer is 256.
+
+![alt text](https://github.com/RU09342/milestone-1-communicating-with-will-byers-juice-crew/blob/master/Milestone_StrangerThings/Schematic.JPG)
+
+
 ### Testing the LED
 Once initialization is completed, the program runs a small test program before going into low power mode to verify the red, green and blue parts of the LED are working correctly. The code cycles the LED through the following colors with a delay inbetween:Red, yellow, green, light blue, blue, purple, and back to red. It does this simply by toggling the ports.
 ### Software PWM
